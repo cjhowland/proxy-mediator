@@ -14,7 +14,8 @@ services:
       LOG_LEVEL: DEBUG
 
   agent_alice:
-    image: bcgovimages/aries-cloudagent:py36-1.16-1_0.7.3
+    image: dbluhm/acapy:fix-default-mediator
+    # image: bcgovimages/aries-cloudagent:py36-1.16-1_0.7.3
     command: >
       start --label agent_alice -it http 0.0.0.0 4011 -ot http -e http://agent_alice:4011
       --no-ledger --admin 0.0.0.0 4001 --admin-insecure-mode
@@ -26,7 +27,8 @@ services:
 
 
   agent_bob:
-    image: bcgovimages/aries-cloudagent:py36-1.16-1_0.7.3
+    image: dbluhm/acapy:fix-default-mediator
+    # image: bcgovimages/aries-cloudagent:py36-1.16-1_0.7.3
     command: >
       start --label agent_bob -it http 0.0.0.0 4012 -ot http -e http://agent_bob:4012
       --no-ledger --admin 0.0.0.0 4002 --admin-insecure-mode
