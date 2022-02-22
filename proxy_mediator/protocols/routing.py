@@ -5,6 +5,7 @@ from typing import Any, Dict
 
 from aries_staticagent.message import BaseMessage, Message
 from aries_staticagent.module import Module, ModuleRouter
+from pydantic.class_validators import validator
 
 from ..agent import Connection
 from ..error import Reportable
@@ -45,12 +46,21 @@ class Forward(BaseMessage):
     to: str
     msg: Dict[str, Any]
 
+    @validator("type", pre=True, always=True)
+    @classmethod
+    def _type(cls, value):
+        """Set type if not present."""
+        if not value:
+            return cls.msg_type
+        return value
+
 
 class Routing(Module):
     protocol = "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/routing/1.0"
     route = ModuleRouter(protocol)
 
     @route
+    @route(doc_uri="https://didcomm.org/")
     async def forward(self, msg: Message, conn: Connection):
         """Handle forward message."""
         fwd = Forward.parse_obj(msg.dict(by_alias=True))
